@@ -1,29 +1,39 @@
 #!/usr/bin/env python
 import sys
 import warnings
-
+import argparse
 from datetime import datetime
 
 from research_crew.crew import ResearchCrew
 
+# Suppress non-critical warnings
 warnings.filterwarnings("ignore", category=SyntaxWarning, module="pysbd")
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="pydantic")
+warnings.filterwarnings("ignore", category=UserWarning, module="pydantic")
 
 # This main file is intended to be a way for you to run your
 # crew locally, so refrain from adding unnecessary logic into this file.
 # Replace with inputs you want to test with, it will automatically
 # interpolate any tasks and agents information
 
+def parse_args():
+    parser = argparse.ArgumentParser(description='Run the research crew with optional PDF document')
+    parser.add_argument('--pdf', type=str, help='Path to the PDF document to analyze')
+    return parser.parse_args()
+
 def run():
     """
     Run the crew.
     """
+    args = parse_args()
     inputs = {
         'topic': 'AI LLMs',
         'current_year': str(datetime.now().year)
     }
     
     try:
-        ResearchCrew().crew().kickoff(inputs=inputs)
+        crew = ResearchCrew(pdf_path=args.pdf)
+        crew.crew().kickoff(inputs=inputs)
     except Exception as e:
         raise Exception(f"An error occurred while running the crew: {e}")
 

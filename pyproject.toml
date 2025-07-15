@@ -1,12 +1,20 @@
 [project]
 name = "research_crew"
 version = "0.1.0"
-description = "research_crew using crewAI"
-authors = [{ name = "Your Name", email = "you@example.com" }]
-requires-python = ">=3.10,<3.13"
-dependencies = [
-    "crewai[tools]>=0.105.0,<1.0.0"
+description = "A research crew implementation"
+authors = [
+    { name = "Your Name", email = "your.email@example.com" }
 ]
+dependencies = [
+    "crewai[tools]>=0.105.0,<1.0.0",
+    "crewai-tools>=0.0.10",
+    "PyPDF2>=3.0.0",
+    "pydantic>=2.0.0",
+    "google-generativeai>=0.3.0"
+]
+requires-python = ">=3.10,<3.13"
+readme = "README.md"
+license = { text = "MIT" }
 
 [project.scripts]
 research_crew = "research_crew.main:run"
@@ -21,3 +29,6 @@ build-backend = "hatchling.build"
 
 [tool.crewai]
 type = "crew"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/research_crew"]

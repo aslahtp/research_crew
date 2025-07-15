@@ -1,5 +1,6 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
+from research_crew.tools.pdf_tool import PDFSearch
 
 # If you want to run a snippet of code before or after the crew starts, 
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -15,12 +16,17 @@ class ResearchCrew():
 	agents_config = 'config/agents.yaml'
 	tasks_config = 'config/tasks.yaml'
 
+	def __init__(self, pdf_path: str = None):
+		super().__init__()
+		self.pdf_tool = PDFSearch(pdf_path or r"C:\dev\Projects\crewai\research_crew\generated_notes.pdf")
+
 	# If you would like to add tools to your agents, you can learn more about it here:
 	# https://docs.crewai.com/concepts/agents#agent-tools
 	@agent
 	def researcher(self) -> Agent:
 		return Agent(
 			config=self.agents_config['researcher'],
+			tools=[self.pdf_tool],
 			verbose=True
 		)
 
@@ -28,6 +34,7 @@ class ResearchCrew():
 	def reporting_analyst(self) -> Agent:
 		return Agent(
 			config=self.agents_config['reporting_analyst'],
+			tools=[self.pdf_tool],
 			verbose=True
 		)
 
